@@ -1,93 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Card Game</title>
-    <style>
-      /* CSS styles */
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f0f0f0;
-      }
 
-      #root {
-        position: relative;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Card Game</title>
+  <style>
+    /* CSS styles */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
 
-      .card {
-        width: 150px;
-        height: 200px;
-        border-radius: 50px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border: 1px solid black;
-        padding: 10px;
-        background-color: white;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
+    #root {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
 
-    <script>
-      // JavaScript code
-      const cards = [
-        { chosen: true, content: "1", color: "lightblue" },
-        { chosen: false, content: "2", color: "lightgreen" },
-        { chosen: false, content: "3", color: "lightcoral" },
-      ];
+    .card {
+      width: 150px;
+      height: 200px;
+      border-radius: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid black;
+      padding: 10px;
+      background-color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
 
-      function renderCards() {
-        const root = document.getElementById("root");
-        root.innerHTML = "";
+<body>
+  <div id="root"></div>
 
-        cards.forEach((card, index) => {
-          const cardElement = document.createElement("div");
-          cardElement.classList.add("card");
-          cardElement.style.backgroundColor = card.color;
-          cardElement.addEventListener("click", () => handleClick(index));
+<script>
+  // JavaScript code
+  const cards = [
+    { chosen: true, content: "1", color: "lightblue" },
+    { chosen: false, content: "2", color: "lightgreen" },
+    { chosen: false, content: "3", color: "lightcoral" },
+  ];
 
-          const content = document.createElement("h3");
-          content.textContent = card.content;
-          cardElement.appendChild(content);
+  function renderCards() {
+    const root = document.getElementById("root");
+    root.innerHTML = "";
 
-          root.appendChild(cardElement);
-        });
-      }
+    cards.forEach((card, index) => {
+      const cardElement = document.createElement("div");
+      cardElement.classList.add("card");
+      cardElement.style.backgroundColor = card.color;
+      cardElement.addEventListener("click", () => handleClick(index));
 
-      function handleClick(index) {
-        cards.forEach((card, i) => {
-          if (i === index) {
-            card.chosen = true;
-          } else {
-            card.chosen = false;
-          }
-        });
+      const content = document.createElement("h3");
+      content.textContent = card.content;
+      cardElement.appendChild(content);
 
-        const chosenCard = cards.find((card) => card.chosen);
-        if (chosenCard) {
-          const chosenIndex = cards.findIndex((card) => card.chosen);
-          const removedCard = cards.splice(chosenIndex, 1)[0];
-          cards.unshift(removedCard);
-        }
+      root.appendChild(cardElement);
+    });
+  }
 
-        renderCards();
-      }
+  function handleClick(index) {
+    // تحديث حالة العنصر المختار فقط
+    cards.forEach((card, i) => {
+      card.chosen = i === index;
+    });
 
-      // Initial render
-      renderCards();
-    </script>
-  </body>
+    // إعادة ترتيب المصفوفة بحيث يبدأ العنصر المختار أولًا
+    rearrangeCards(index);
+
+    // إعادة عرض البطاقات
+    renderCards();
+  }
+
+  function rearrangeCards(selectedIndex) {
+    // إعادة ترتيب المصفوفة بناءً على فهرس العنصر المختار
+    const rearranged = [...cards.slice(selectedIndex), ...cards.slice(0, selectedIndex)];
+    for (let i = 0; i < cards.length; i++) {
+      cards[i] = rearranged[i];
+    }
+  }
+
+  // Initial render
+  renderCards();
+</script>
+
+</body>
+
 </html>
